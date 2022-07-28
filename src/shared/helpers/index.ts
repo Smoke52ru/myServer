@@ -1,0 +1,1 @@
+export {TMethods} from './httpMethods'
