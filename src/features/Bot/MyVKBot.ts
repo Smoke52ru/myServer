@@ -32,9 +32,12 @@ export class MyVKBot {
   }
 
   initCommands(commands: TCommand[]) {
-    commands.forEach((currentCommand) => {
+    console.log('Command middlewares:')
+    commands.forEach((currentCommand, index) => {
+      console.log(`${index+1}. ${currentCommand.name}`)
       this.bot.command(makeCommandArray(currentCommand.prefixes, currentCommand.keywords), currentCommand.middleware);
     })
+    console.log()
   }
 
   start() {
