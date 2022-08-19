@@ -8,7 +8,6 @@ export const errorReporterMiddleware: VkBotMiddleware = async (ctx, next) => {
     const userId = ctx.message.from_id;
     const userFullName = await getFullNameByUserId(userId);
 
-
     const reportMessage = (
       `Сообщение:\n` +
       `"${userMessage}"\n` +
@@ -17,6 +16,8 @@ export const errorReporterMiddleware: VkBotMiddleware = async (ctx, next) => {
       `вызвало ошибку: \n` +
       `${err}`
     )
+
+    console.log(err)
 
     await ctx.bot.sendMessage(process.env.VK_ADMIN_ID!, reportMessage)
   }

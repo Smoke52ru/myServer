@@ -3,10 +3,11 @@ import {helpCommands, helpMiddleware} from "./middlewares/help";
 import {scheduleCommandsAll} from "./middlewares/schedule/commands";
 import {weatherCommands, weatherMiddleware} from "./middlewares/weather";
 
-enum Commands {
+enum Commands { // TODO
   Help = 'help',
   Schedule = 'schedule',
   Weather = 'weather',
+  Keyboard = '',
 }
 
 export type TCommand = {

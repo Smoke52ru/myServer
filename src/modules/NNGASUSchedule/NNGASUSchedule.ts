@@ -76,11 +76,11 @@ export class NNGASUSchedule {
       }).end();
   }
 
-  async getScheduleByDate(date: string): Promise<TScheduleDay> {
+  async getScheduleByDate(queryDate: string): Promise<TScheduleDay> {
     const baseUrl = await this._getLinkToSchedule(this.login, this.password)
     const composedUrl = (baseUrl
-      + `&ScheduleSearch%5Bstart_date%5D=${date}`
-      + `&ScheduleSearch%5Bend_date%5D=${date}`)
+      + `&ScheduleSearch%5Bstart_date%5D=${queryDate}`
+      + `&ScheduleSearch%5Bend_date%5D=${queryDate}`)
 
     return await axios.get(composedUrl)
       .then((response) => {

@@ -21,7 +21,10 @@ export const scheduleMiddleware: VkBotMiddleware = async (ctx) => {
     } else {
       await schedule.getScheduleByDate(args[0])
     }
+  } else {
+    await schedule.getScheduleByDate(getDateStringByDeltaDays())
   }
+
   const message = [
     schedule.schedule.date,
     ...schedule.schedule.lessons.map((lesson) => [
@@ -32,5 +35,6 @@ export const scheduleMiddleware: VkBotMiddleware = async (ctx) => {
       lesson.link
     ].filter((val) => !!val).join('\n'))
   ].join('\n\n')
+
   ctx.reply(message);
 }
