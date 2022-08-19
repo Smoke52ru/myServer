@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import {ExpressServer, VKBot} from "./features";
+import {ExpressServer, MyVKBot} from "./features";
 
 const PORT = parseInt(process.env.PORT!);
 
@@ -8,7 +8,5 @@ server.start(PORT);
 
 const VK_TOKEN = process.env.VK_TOKEN;
 
-const vkBot = new VKBot(VK_TOKEN);
+const vkBot = new MyVKBot(VK_TOKEN);
 vkBot.start();
-
-// console.log(`All your app are belong to us on port ${PORT}`)

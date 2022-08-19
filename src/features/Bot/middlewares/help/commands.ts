@@ -1,0 +1,1 @@
+export const helpCommands = ['help', 'помощь', 'h']

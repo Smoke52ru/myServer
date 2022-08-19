@@ -1,2 +1,2 @@
 export {ExpressServer} from './Express'
-export {VKBot} from './Bot'
+export {MyVKBot} from "./Bot/MyVKBot";
