@@ -3,7 +3,6 @@ import {scheduleCommands} from "./commands";
 import {getDateStringByDeltaDays, getDateStringByWeekdayNumber} from "../../../../shared/helpers/getDateString";
 
 export const scheduleMiddleware: VkBotMiddleware = async (ctx) => {
-  console.log('schedule start') // FIXME
   const [command, ...args] = ctx.message.text.split(' ')
   const schedule = new NNGASUSchedule(process.env.NNGASU_LOGIN, process.env.NNGASU_PASSWORD)
   if (scheduleCommands.today.includes(command)) {
@@ -37,6 +36,5 @@ export const scheduleMiddleware: VkBotMiddleware = async (ctx) => {
     ].filter((val) => !!val).join('\n'))
   ].join('\n\n')
 
-  console.log('schedule finish') //FIXME
   ctx.reply(message);
 }
