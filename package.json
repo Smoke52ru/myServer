@@ -1,12 +1,14 @@
 {
   "name": "myserver",
   "version": "1.0.0",
+  "engines": {
+    "node": "16.x"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "prestart": "npm run build",
-    "start": "node build/index.js",
+
+    "start": "nodemon src/index.ts",
     "dev": "nodemon src/index.ts"
   },
   "author": "",
