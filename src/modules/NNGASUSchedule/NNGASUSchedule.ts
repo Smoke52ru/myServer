@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {HTMLElement, parse} from 'node-html-parser';
-import Nightmare from 'nightmare';
+import {get_jhash} from "./utils";
+import {CookieJar} from "tough-cookie";
+import got from "got";
 
 // TODO раскидать по файлам
 
@@ -46,34 +48,51 @@ const parseLesson = (tr: HTMLElement): TLesson => {
 }
 
 export class NNGASUSchedule {
-  private nightmare: Nightmare;
   private login: string;
   private password: string;
   public schedule: TScheduleDay;
+  private cookieJar;
 
   constructor(login: string, password: string) {
-    this.nightmare = new Nightmare({
-      typeInterval: 1,
-      pollInterval: 50,
-      show: !!process.env.DEV_MODE
-    });
     this.login = login
     this.password = password
+    this.cookieJar = new CookieJar()
   }
 
   async _getLinkToSchedule(userLogin: string, userPassword: string) {
+    const baseUrl = 'https://www.nngasu.ru'
     const urlLogin = 'https://www.nngasu.ru/cdb/schedule/student.php?login=yes';
+    const userAgent = 'SmokyBot/1.0'
+    const cookieJar = this.cookieJar
+    const data = {
+      'AUTH_FORM': 'Y',
+      'TYPE': 'AUTH',
+      'USER_LOGIN': userLogin,
+      'USER_PASSWORD': userPassword,
+      'backurl': '\\cdb\\schedule\\student.php',
+      'Login': 'Войти'
+    }
 
-    return this.nightmare
-      .goto(urlLogin)
-      .wait('input')
-      .insert("input[name='USER_LOGIN']", userLogin)
-      .insert("input[name='USER_PASSWORD']", userPassword)
-      .click("input[name='Login']")
-      .wait('iframe')
-      .evaluate(() => {
-        return document.querySelector('iframe').src
-      }).end();
+    for (let i = 0; i < 10; i++) {
+      // Первый запрос с целью получить первые куки и сформировать оставшиеся
+      const response = await got.get(urlLogin, {cookieJar})
+      // Если недостаточно куки, то наращиваем
+      if (cookieJar.getSetCookieStringsSync(urlLogin).length < 3) {
+        const js_p = response.headers['set-cookie'][0].split(';')[0].split('=')[1]
+        const jhash = get_jhash(parseInt(js_p.split(',')[0]))
+
+        await Promise.all([
+          cookieJar.setCookie(`__jhash_=${jhash}`, baseUrl),
+          cookieJar.setCookie(`__jua_=${userAgent}`, baseUrl),
+        ])
+      }
+      // Остальные куки подставятся автоматически из заголовков ответа
+      // Если кук недостаточно, то логиниться нет смысла, идем по второму кругу
+      if (cookieJar.getSetCookieStringsSync(urlLogin).length < 4) continue
+      // Логинимся и достаем ссылку на табличку расписания
+      const {body} = await got.post(urlLogin, {cookieJar, form: data})
+      return parse(body).querySelector('iframe').rawAttributes.src
+    }
   }
 
   async getScheduleByDate(queryDate: string): Promise<TScheduleDay> {
