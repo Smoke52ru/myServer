@@ -64,6 +64,7 @@ export class NNGASUSchedule {
     const urlLogin = 'https://www.nngasu.ru/cdb/schedule/student.php?login=yes';
     const userAgent = 'SmokyBot/1.0'
     const cookieJar = this.cookieJar
+    let maxRetries = 100;
     const data = {
       'AUTH_FORM': 'Y',
       'TYPE': 'AUTH',
@@ -73,7 +74,7 @@ export class NNGASUSchedule {
       'Login': 'Войти'
     }
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < maxRetries; i++) {
       // Первый запрос с целью получить первые куки и сформировать оставшиеся
       const response = await got.get(urlLogin, {cookieJar})
       // Если недостаточно куки, то наращиваем
