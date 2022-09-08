@@ -7,7 +7,7 @@ type TCommands = {
 
 export const scheduleCommands: TCommands = {
   basic: ['schedule', 's', 'расписание'],
-  weekdays: ['пн', 'вт', 'ср', 'чт', 'пт'],
+  weekdays: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб'],
   today: ['сегодня'],
   tomorrow: ['завтра']
 }

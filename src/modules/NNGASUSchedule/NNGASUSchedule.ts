@@ -47,13 +47,21 @@ const parseLesson = (tr: HTMLElement): TLesson => {
   }
 }
 
+type TOptions = {
+  composeDuplicates?: boolean;
+}
+
 export class NNGASUSchedule {
+  private options: TOptions
   private login: string;
   private password: string;
   public schedule: TScheduleDay;
   private cookieJar;
 
-  constructor(login: string, password: string) {
+  constructor(login: string, password: string, options?: TOptions) {
+    this.options = {
+      composeDuplicates: options?.composeDuplicates || true
+    }
     this.login = login
     this.password = password
     this.cookieJar = new CookieJar()
@@ -61,7 +69,7 @@ export class NNGASUSchedule {
 
   async _getLinkToSchedule(userLogin: string, userPassword: string) {
     const baseUrl = 'https://www.nngasu.ru'
-    const urlLogin = 'https://www.nngasu.ru/cdb/schedule/student.php?login=yes';
+    const urlLogin = `${baseUrl}/cdb/schedule/student.php?login=yes`;
     const userAgent = 'SmokyBot/1.0'
     const cookieJar = this.cookieJar
     let maxRetries = 100;
@@ -115,6 +123,26 @@ export class NNGASUSchedule {
         this.schedule = {
           date,
           lessons
+        }
+      })
+      .then(() => {
+        if (this.options.composeDuplicates) {
+          this.schedule.lessons = this.schedule.lessons.reduce(
+            (acc: TLesson[], cur: TLesson): TLesson[] => {
+              if (acc.length === 0) return [cur];
+
+              const last = acc[acc.length - 1]
+              if (
+                cur.time === last.time &&
+                cur.subject === last.subject &&
+                cur.teacher === last.teacher
+              ) {
+                last.room += `, ${cur.room}`
+              } else {
+                acc.push(cur)
+              }
+              return acc
+            }, [])
         }
         return this.schedule
       })
