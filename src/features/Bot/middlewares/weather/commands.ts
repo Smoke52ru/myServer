@@ -1,1 +1,1 @@
-export const weatherCommands = ['weather', 'погода']
+export const weatherCommands = ['погода','weather']
