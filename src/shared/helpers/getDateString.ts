@@ -7,5 +7,5 @@ export const getDateStringByWeekdayNumber = (weekdayNumber: number): string => {
 export const getDateStringByDeltaDays = (deltaDays: number = 0): string => {
   return new Date(
     Date.now() + deltaDays * msInDay
-  ).toLocaleDateString()
+  ).toLocaleDateString('ru-RU')
 }

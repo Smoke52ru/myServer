@@ -85,7 +85,6 @@ export const scheduleMiddleware: VkBotMiddleware = async (ctx) => {
             `${result[0].date} - ${result[0].dayOfWeekString} - ${group}`,
             ...result.map((lesson) => [
                 `${lesson.beginLesson} - ${lesson.endLesson}`,
-                lesson.stream ? '*потоковая' : `${lesson.stream}`,
                 `${lesson.discipline} (${lesson.kindOfWork})`,
                 `${lesson.lecturer_title}`,
                 `${lesson.auditorium} (${lesson.building})`,
