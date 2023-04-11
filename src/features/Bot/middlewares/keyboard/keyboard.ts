@@ -6,10 +6,26 @@ import {weatherCommands} from "../weather";
 const secondaryButtons = [scheduleCommands.weekdays[5], weatherCommands[0]]
 
 export const keyboardMarkupDefault: VkBotKeyboard = Markup.keyboard(
-  keyboardButtonsDefault.map((row) => {
-    return row.map((button) => {
-      const color: VkBotButton['color'] = secondaryButtons.includes(button) ? 'secondary' : 'primary'
-      return Markup.button(button, color)
+    keyboardButtonsDefault.map((row) => {
+        return row.map((button) => {
+            const color: VkBotButton['color'] = secondaryButtons.includes(button) ? 'secondary' : 'primary'
+            return Markup.button(button, color)
+        })
     })
-  })
+)
+
+export const keyboardMarkupNNGUConstructor = (groupName: string): VkBotKeyboard => Markup.keyboard(
+    keyboardButtonsDefault.map((row) => {
+        return row.map((button) => {
+            const color: VkBotButton['color'] = secondaryButtons.includes(button) ? 'secondary' : 'primary'
+            return Markup.button(
+                button,
+                color,
+                {
+                    university: 'nngu',
+                    group: groupName
+                }
+            )
+        })
+    })
 )
