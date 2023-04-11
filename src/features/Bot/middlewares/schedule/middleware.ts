@@ -72,14 +72,14 @@ export const scheduleMiddleware: VkBotMiddleware = async (ctx) => {
             )
         }
 
-        console.log(
-            getDateStringByDeltaDays()
-                .split('.')
-                .reverse()
-                .join('.')
-        )
-        console.log(ctx.message.payload)
-        console.log(result)
+        // console.log(
+        //     getDateStringByDeltaDays()
+        //         .split('.')
+        //         .reverse()
+        //         .join('.')
+        // )
+        // console.log(ctx.message.payload)
+        // console.log(result)
 
         const message = [
             `${result[0].date} - ${result[0].dayOfWeekString} - ${group}`,
