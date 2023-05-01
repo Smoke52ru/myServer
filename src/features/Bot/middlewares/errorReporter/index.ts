@@ -17,8 +17,15 @@ export const errorReporterMiddleware: VkBotMiddleware = async (ctx, next) => {
       `${err}`
     )
 
+    const userReportMessage = (
+      `Упс... Произошла ошибка...\n` +
+      `Разработчик уже оповещен и скоро всё поправит)\n` +
+      `Извините за неудобства)`
+    )
+
     console.log(err)
 
     await ctx.bot.sendMessage(process.env.VK_ADMIN_ID!, reportMessage)
+    await ctx.reply(userReportMessage)
   }
 }
